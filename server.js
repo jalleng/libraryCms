@@ -20,7 +20,13 @@ mongoose.connect(process.env.MONGODB_URI);
 
 let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';
 
+
+app.use('/', function (req, res, next) {
+  res.send('Cthulu has awoke!');
+});
+
 app.use(cors);
+
 app.use(morgan(morganFormat));
 app.use(errors);
 
