@@ -4,10 +4,13 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const Promise = require('bluebird');
 const debug = require('debug')('library:server.js');
 
 const errors = require('./lib/error-middleware.js');
+
+dotenv.load();
 
 const PORT = process.env.PORT || 3000;
 
