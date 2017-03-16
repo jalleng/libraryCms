@@ -2,7 +2,6 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const debug = require('debug')('library:book');
 
 const bookSchema = Schema({
   isbn: {type: Number, required: true},
@@ -13,4 +12,4 @@ const bookSchema = Schema({
   libraryID: {type: Schema.Types.ObjectId, required: false}
 });
 
-module.exports = mongoose.module('book', bookSchema);
+module.exports = mongoose.model('book', bookSchema);
