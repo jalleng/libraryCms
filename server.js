@@ -8,7 +8,10 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const debug = require('debug')('library:server.js');
 
-//require routers here
+const bookRouter = require('./route/book-routes.js');
+
+
+
 const errors = require('./lib/error-middleware.js');
 
 dotenv.load();
@@ -21,13 +24,14 @@ mongoose.connect(process.env.MONGODB_URI);
 let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';
 
 
-app.use('/', function (req, res, next) {
-  res.send('Cthulu has awoke!');
-});
+// app.use('/', function (req, res, next) {
+//   res.send('Cthulu has awoke!');
+// });
 
-app.use(cors);
-
+app.use(cors());
 app.use(morgan(morganFormat));
+
+app.use(bookRouter);
 app.use(errors);
 
 
