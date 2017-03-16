@@ -9,6 +9,7 @@
   "scripts": {
     "test": "DEBUG='library*' mocha",
     "start": "DEBUG='library*' node server.js",
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "nm": "DEBUG='library*' nodemon server.js"
   },
   "repository": {
@@ -27,6 +28,7 @@
     "body-parser": "^1.17.0",
     "cors": "^2.8.1",
     "debug": "^2.6.1",
+    "dotenv": "^4.0.0",
     "express": "^4.15.0",
     "http-errors": "^1.6.1",
     "mongoose": "^4.8.5",
@@ -34,7 +36,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.12.0",
     "gulp": "^3.9.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "superagent": "^3.5.0"
   }

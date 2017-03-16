@@ -1,31 +1,44 @@
 'use strict';
 
 const express = require('express'); 
+const cors = require('cors');
+const dotenv = require('dotenv');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const Promise = require('bluebird');
 const debug = require('debug')('library:server.js');
 
+const bookRouter = require('./route/book-routes.js');
+
+
+
 const errors = require('./lib/error-middleware.js');
 
-const PORT = process.env.PORT || 3000;
+dotenv.load();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/note';
-
-mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI);
-
+const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors);
-app.use(morgan('dev'));
+mongoose.connect(process.env.MONGODB_URI);
+
+let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';
 
 
+// app.use('/', function (req, res, next) {
+//   res.send('Cthulu has awoke!');
+// });
+
+app.use(cors());
+app.use(morgan(morganFormat));
+
+app.use(bookRouter);
 app.use(errors);
+
+
 
 app.listen(PORT, () => {
   debug(`Cthulhu awakened on port: ${PORT}`);
+  console.log(`Cthulhu awakened on port: ${PORT}`);
 });
 
 
