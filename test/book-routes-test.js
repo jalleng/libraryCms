@@ -20,6 +20,15 @@ const exampleBook = {
   status: 'on loan'
 };
 
+const updatedBook = {
+  status: 'in house'
+};
+
+const badBook = {
+  isbn: '54321',
+  name: 'wat name'
+};
+
 const exampleLibrary = {
   name: 'reference',
   description: 'books for reference'
@@ -32,7 +41,7 @@ describe('Book Routes', function() {
         if (this.tempBook) {
           Book.remove({})
           .then ( () => done() )
-          .cathc(done);
+          .catch(done);
           return;
         }
         done();
@@ -43,8 +52,73 @@ describe('Book Routes', function() {
         .send(exampleBook)
         .end( (err, res) => {
           if (err) return done(err);
+          expect(res.status);
           expect(res.body.title).to.equal('wat title');
+          this.tempBook = res.body;
           done();
+        });
+      });
+    });
+
+    describe('with an invalid body', function() {
+      it('should throw a 400 error', done => {
+        request.post(`${url}/api/book`)
+        .send(badBook)
+        .end( (err, res) => {
+          expect(res.status).to.equal(400);
+          expect(err.message).to.equal('Bad Request');
+          done();
+        });
+      });
+    });
+
+    describe('with no body', function() {
+      it('should throw a 400 error', done => {
+        request.post(`${url}/api/book`)
+        .end( (err, res) => {
+          expect(res.status).to.equal(400);
+          expect(err.message).to.equal('Bad Request');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('routes that require a book in the db', function() {
+    before( done => {
+      new Book(exampleBook).save()
+      .then ( book => {
+        this.book = book;
+        done();
+      })
+      .catch(done);
+    });
+
+    describe('GET: /api/book/:bookID', () => {
+      describe('with a valid bookID', () => {
+        it('should return a book', done => {
+          request.get(`${url}/api/book/${this.book._id}`)
+          .end( (err, res) => {
+            if (err) return done(err);
+            expect(res.status).to.equal(200);
+            expect(res.body.isbn).to.equal(12345);
+            done();
+          });
+        });
+      });
+    });
+
+    describe('PUT: /api/book/:bookID', () => {
+      describe('with a valid body', () => {
+        it('should return an updated book', done => {
+          request.put(`${url}/api/book/${this.book._id}`)
+          .send(updatedBook)
+          .end( (err, res) => {
+            if (err) return done(err);
+            expect(res.status).to.equal(200);
+            expect(res.body.status).to.equal('in house');
+            done();
+          });
         });
       });
     });
