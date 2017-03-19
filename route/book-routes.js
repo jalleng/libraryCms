@@ -32,6 +32,13 @@ bookRouter.get('/api/book/:bookID', function(req, res, next) {
 
 bookRouter.put('/api/book/:bookID', jsonParser, function(req, res, next) {
   debug('PUT: /api/book/:bookID');
+  
+  if (Object.keys(req.body).length === 0) return next(createError(400, 'invalid request body'));
+  
+  for (let prop in req.body) {
+    if (!Book.schema.paths[prop]) return next(createError(400, 'invalid request body'));
+  }
+
   Book.findByIdAndUpdate(req.params.bookID, req.body, {new: true})
   .then( book => res.json(book))
   .catch( err => next(createError(404, err.message)));
