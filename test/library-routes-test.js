@@ -92,25 +92,25 @@ describe('Library Routes', function() {
 
   });
 
-  describe('GET: /api/library', function() {
-    before( done => {
-      new Library(exampleLibrary).save()
-      .then ( library => {
-        this.library = library;
-        done();
-      })
-      .catch(done);
-    });
+  // describe('GET: /api/library', function() {
+  //   before( done => {
+  //     new Library(exampleLibrary).save()
+  //     .then ( library => {
+  //       this.library = library;
+  //       done();
+  //     })
+  //     .catch(done);
+  //   });
 
-    describe('With a valid libraryID', function() {
-      it('should return a library', done => {
-        request.get(`${url}/api/library/${this.library._id}`)
-        .end( (err, res) => {
-          if (err) return done(err);
-          expect(res.status).to.equal(200);
-          done();
-        });
-      });
-    });
-  });
+  //   describe('With a valid libraryID', function() {
+  //     it('should return a library', done => {
+  //       request.get(`${url}/api/library/${this.library._id}`)
+  //       .end( (err, res) => {
+  //         if (err) return done(err);
+  //         expect(res.status).to.equal(200);
+  //         done();
+  //       });
+  //     });
+  //   });
+  // });
 });
