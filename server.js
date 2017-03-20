@@ -9,7 +9,7 @@ const Promise = require('bluebird');
 const debug = require('debug')('library:server.js');
 
 const bookRouter = require('./route/book-routes.js');
-
+const libraryRouter = require('./route/library-routes.js');
 
 
 const errors = require('./lib/error-middleware.js');
@@ -32,6 +32,7 @@ app.use(cors());
 app.use(morgan(morganFormat));
 
 app.use(bookRouter);
+app.use(libraryRouter);
 app.use(errors);
 
 

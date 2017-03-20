@@ -52,7 +52,7 @@ describe('Book Routes', function() {
         .send(exampleBook)
         .end( (err, res) => {
           if (err) return done(err);
-          expect(res.status);
+          expect(res.status).to.equal(200);
           expect(res.body.title).to.equal('wat title');
           this.tempBook = res.body;
           done();
@@ -61,7 +61,7 @@ describe('Book Routes', function() {
     });
 
     describe('with an invalid body', function() {
-      it('should throw a 400 error', done => {
+      it('should return a 400 error', done => {
         request.post(`${url}/api/book`)
         .send(badBook)
         .end( (err, res) => {
@@ -73,7 +73,7 @@ describe('Book Routes', function() {
     });
 
     describe('with no body', function() {
-      it('should throw a 400 error', done => {
+      it('should return a 400 error', done => {
         request.post(`${url}/api/book`)
         .end( (err, res) => {
           expect(res.status).to.equal(400);
@@ -180,7 +180,6 @@ describe('Book Routes', function() {
           });
         });
       });
-
 
       describe('With a valid bookID', () => {
         it('should return a 204 status code', done => {
