@@ -1,15 +1,15 @@
 'use strict';
 
-const debug = require('debug')('library:user-routes');
-const jsonParser = require('body-parser');
 const Router = require('express').Router;
+const jsonParser = require('body-parser').json();
+const debug = require('debug')('library:user-routes');
 const basicAuth = require('../lib/basic-auth-middleware');
 
 const User = require('../model/user.js');
 
-const authRouter = module.exports = Router();
+const userRouter = module.exports = Router();
 
-authRouter.post('/api/signup', jsonParser, function(req, res, next) {
+userRouter.post('/api/signup', jsonParser, function(req, res, next) {
   debug('POST: /api/signup');
 
   let password = req.body.password;
@@ -24,7 +24,7 @@ authRouter.post('/api/signup', jsonParser, function(req, res, next) {
   .catch(next);
 });
 
-authRouter.get('/api/signin', basicAuth, function(req, res, next) {
+userRouter.get('/api/signin', basicAuth, function(req, res, next) {
   debug('GET: /api/signin');
 
   User.findOne({ username: req.auth.username })

@@ -58,7 +58,7 @@ userSchema.methods.generateFindHash = function() {
   });
 };
 
-userSchema.generateToken = function() {
+userSchema.methods.generateToken = function() {
   debug('generateToken');
 
   return new Promise((resolve, reject) => {
