@@ -10,7 +10,7 @@ const createError = require('http-errors');
 const Schema = mongoose.Schema;
 
 const userSchema = Schema({
-  name: {type: String, unique: true, required: true},
+  username: {type: String, unique: true, required: true},
   password: {type: String, required: true},
   findHash: {type: String, unique: true},
   libraryList: [{type: Schema.Types.ObjectId, ref:'library'}],
