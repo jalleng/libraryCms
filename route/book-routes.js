@@ -49,5 +49,5 @@ bookRouter.delete('/api/book/:bookID',  jsonParser, function(req, res, next) {
   debug('DELETE: /api/book/:bookID');
   Book.findByIdAndRemove(req.params.bookID)
   .then( () => res.status(204).send())
-  .catch ( err => next(createError(404, err.message)));
+  .catch( err => next(createError(404, err.message)));
 });

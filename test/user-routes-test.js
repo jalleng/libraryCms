@@ -19,6 +19,11 @@ const exampleUser = {
   password: 'testPassword'
 };
 
+const badUser = {
+  name: 'badName',
+  password: 'badPassword'
+};
+
 describe('User routes', function() {
   describe('POST: /api/signup', function() {
     describe('with a valid user', function() {
@@ -40,6 +45,23 @@ describe('User routes', function() {
         });
       });
     });
+
+    describe('with an invalid user', function() {
+      after( done => {
+        User.remove({})
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a 400 error', done => {
+        request.post(`${url}/api/signup`)
+        .send(badUser)
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
   });
   describe('GET: /api/signin', function() {
     describe('with a valid user', function() {
@@ -48,7 +70,6 @@ describe('User routes', function() {
         user.generatePasswordHash(exampleUser.password)
         .then( user => user.save())
         .then( user => {
-          console.log( user, '*************');
           this.tempUser = user;
           done();
         })
@@ -67,9 +88,38 @@ describe('User routes', function() {
         .auth('testName', 'testPassword')
         .end((err, res) => {
           if (err) return done(err);
-          console.log('\nuser:', this.tempUser);
-          console.log('\ntoken:', res.text);
+          // console.log('\nuser:', this.tempUser);
+          // console.log('\ntoken:', res.text);
           expect(res.status).to.equal(200);
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid user', function() {
+      before( done => {
+        let user = new User(exampleUser);
+        user.generatePasswordHash(exampleUser.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        User.remove({})
+        .then ( () => done() )
+        .catch(done);
+        return;
+      });
+
+      it('should return a 500 error', done => {
+        request.get(`${url}/api/signin`)
+        .auth('badname', 'badpassword')
+        .end((err, res) => {
+          expect(res.status).to.equal(500);
           done();
         });
       });
