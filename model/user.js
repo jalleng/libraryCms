@@ -31,7 +31,7 @@ userSchema.methods.generatePasswordHash = function(password) {
 
 userSchema.methods.comparePasswordHash = function(password) {
   debug('comparePasswordHash');
-
+ console.log('password---->>', password);
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, this.password, (err, valid) => {
       if (err) return reject(err);
@@ -66,6 +66,13 @@ userSchema.methods.generateToken = function() {
     .then(findHash => resolve(jwt.sign({ token: findHash}, process.env.APP_SECRET)))
     .catch( err => reject(err));
   });
+};
+
+userSchema.methods.nullCheck = function(user) {
+  return new Promise((resolve, reject) => {
+    if (user === null) return reject(createError(400, 'invalid username or password'));
+    resolve(this);
+  }); 
 };
 
 module.exports = mongoose.model('user', userSchema);

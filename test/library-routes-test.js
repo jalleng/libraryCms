@@ -92,25 +92,37 @@ describe('Library Routes', function() {
 
   });
 
-  // describe('GET: /api/library', function() {
-  //   before( done => {
-  //     new Library(exampleLibrary).save()
-  //     .then ( library => {
-  //       this.library = library;
-  //       done();
-  //     })
-  //     .catch(done);
-  //   });
+  describe('GET: /api/library', function() {
+    before( done => {
+      new Library(exampleLibrary).save()
+      .then ( library => {
+        this.library = library;
+        done();
+      })
+      .catch(done);
+    });
 
-  //   describe('With a valid libraryID', function() {
-  //     it('should return a library', done => {
-  //       request.get(`${url}/api/library/${this.library._id}`)
-  //       .end( (err, res) => {
-  //         if (err) return done(err);
-  //         expect(res.status).to.equal(200);
-  //         done();
-  //       });
-  //     });
-  //   });
-  // });
+    describe('With a valid libraryID', () => {
+      it('should return a library', done => {
+        request.get(`${url}/api/library/${this.library._id}`)
+        .end( (err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal('reference');
+          done();
+        });
+      });
+    });
+
+    describe('With an invalid libraryID', () => {
+      it('should return a 404 error', done => {
+        request.get(`${url}/api/library/invalid`)
+        .end( (err, res) => {
+          expect(res.status).to.equal(404);
+          expect(err.message).to.equal('Not Found');
+          done();
+        });
+      });
+    });
+  });
 });
