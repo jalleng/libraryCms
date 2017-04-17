@@ -8,9 +8,9 @@ const createError = require('http-errors');
 
 const User = require('../model/user.js');
 
-const userRouter = module.exports = Router();
+const authRouter = module.exports = Router();
 
-userRouter.post('/api/signup', jsonParser, function(req, res, next) {
+authRouter.post('/api/signup', jsonParser, function(req, res, next) {
   debug('POST: /api/signup');
 
   let password = req.body.password;
@@ -25,7 +25,7 @@ userRouter.post('/api/signup', jsonParser, function(req, res, next) {
   .catch(next);
 });
 
-userRouter.get('/api/signin', basicAuth, function(req, res, next) {
+authRouter.get('/api/signin', basicAuth, function(req, res, next) {
   debug('GET: /api/signin');
   console.log('my word', req.auth);
   User.findOne({ username: req.auth.username })

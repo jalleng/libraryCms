@@ -10,7 +10,7 @@ const debug = require('debug')('library:server.js');
 
 const bookRouter = require('./route/book-routes.js');
 const libraryRouter = require('./route/library-routes.js');
-const userRouter = require('./route/user-routes.js');
+const authRouter = require('./route/auth-routes.js');
 
 
 const errors = require('./lib/error-middleware.js');
@@ -32,9 +32,9 @@ let morganFormat = process.env.PRODUCTION ? 'common' : 'dev';
 app.use(cors());
 app.use(morgan(morganFormat));
 
+app.use(authRouter);
 app.use(bookRouter);
 app.use(libraryRouter);
-app.use(userRouter);
 
 app.use(errors);
 
